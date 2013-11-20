@@ -14,9 +14,6 @@ game:
   eliminated:
     self: '&5You have been eliminated. Better &cluck&5 next time!'
     others: '&6Player &9{player}&6 has been eliminated!'
-chat:
-  local: '&e[L] {score} {prefix}&8{player} &e&l> &r&7{message}'
-  global: '&c[G] {score} {prefix}&8{player} &c&l> &r&7{message}'
 error:
   cmd-disabled: 'This command is disabled during the game!'
   no-schematics: '&cThere are no schematics available.'

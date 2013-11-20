@@ -5,10 +5,6 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import vc.pvp.skywars.commands.MainCommand;
@@ -19,14 +15,12 @@ import vc.pvp.skywars.listeners.EntityListener;
 import vc.pvp.skywars.listeners.InventoryListener;
 import vc.pvp.skywars.listeners.PlayerListener;
 import vc.pvp.skywars.metrics.MetricsLite;
-import vc.pvp.skywars.player.GamePlayer;
 import vc.pvp.skywars.storage.DataStorage;
 import vc.pvp.skywars.storage.SQLStorage;
 import vc.pvp.skywars.tasks.SyncTask;
 import vc.pvp.skywars.utilities.CraftBukkitUtil;
 import vc.pvp.skywars.utilities.FileUtils;
 import vc.pvp.skywars.utilities.Messaging;
-import vc.pvp.skywars.utilities.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,37 +48,6 @@ public class SkyWars extends JavaPlugin {
         new Messaging(this);
 
         getCommand("skywars").setExecutor(new MainCommand());
-        getCommand("global").setExecutor(new CommandExecutor() {
-            @Override
-            public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-                if (!(sender instanceof Player)) {
-                    return false;
-                }
-
-                if (args.length == 0) {
-                    sender.sendMessage("\247cUsage: /" + label + " <message>");
-                    return true;
-                }
-
-                StringBuilder messageBuilder = new StringBuilder();
-                for (String arg : args) {
-                    messageBuilder.append(arg);
-                    messageBuilder.append(" ");
-                }
-
-                GamePlayer gamePlayer = PlayerController.get().get((Player) sender);
-                String score = StringUtils.formatScore(gamePlayer.getScore());
-
-                Bukkit.broadcastMessage(new Messaging.MessageFormatter()
-                        .setVariable("player", gamePlayer.getBukkitPlayer().getDisplayName())
-                        .setVariable("score", score)
-                        .setVariable("message", Messaging.stripColor(messageBuilder.toString()))
-                        .setVariable("prefix", SkyWars.getChat().getPlayerPrefix(gamePlayer.getBukkitPlayer()))
-                        .format("chat.global"));
-
-                return true;
-            }
-        });
 
         try {
             DataStorage.DataStorageType dataStorageType = DataStorage.DataStorageType.valueOf(getConfig().getString("data-storage", "FILE"));
@@ -116,13 +79,7 @@ public class SkyWars extends JavaPlugin {
             MetricsLite metrics = new MetricsLite(this);
             metrics.start();
         } catch (IOException e) {
-            // Failed to submit the stats :-(
         }
-
-        /*if (getDB() != null) {
-            StatisticsController.get();
-            new StatisticsUpdater();
-        }*/
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
@@ -156,7 +113,6 @@ public class SkyWars extends JavaPlugin {
     }
 
     private void deleteIslandWorlds() {
-        // Worlds
         File workingDirectory = new File(".");
         File[] contents = workingDirectory.listFiles();
 
@@ -170,7 +126,6 @@ public class SkyWars extends JavaPlugin {
             }
         }
 
-        // WorldGuard
         workingDirectory = new File("./plugins/WorldGuard/worlds/");
         contents = workingDirectory.listFiles();
 
@@ -179,7 +134,6 @@ public class SkyWars extends JavaPlugin {
                 if (!file.isDirectory() || !file.getName().matches("island-\\d+")) {
                     continue;
                 }
-
                 FileUtils.deleteFolder(file);
             }
         }

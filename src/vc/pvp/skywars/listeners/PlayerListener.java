@@ -89,40 +89,18 @@ public class PlayerListener implements Listener {
         if (!event.isCancelled()) {
             Player player = event.getPlayer();
             GamePlayer gamePlayer = PlayerController.get().get(player);
-
-            if (PluginConfig.chatHandledByOtherPlugin()) {
-                event.setFormat(event.getFormat().replace("[score]", String.valueOf(gamePlayer.getScore())));
-
-                if (gamePlayer.isPlaying()) {
-                    for (Iterator<Player> iterator = event.getRecipients().iterator(); iterator.hasNext();) {
-                        GamePlayer gp = PlayerController.get().get(iterator.next());
-
-                        if (!gp.isPlaying() || !gp.getGame().equals(gamePlayer.getGame())) {
-                            iterator.remove();
-                        }
-                    }
-
-                } else {
-                    for (Iterator<Player> iterator = event.getRecipients().iterator(); iterator.hasNext();) {
-                        GamePlayer gp = PlayerController.get().get(iterator.next());
-
-                        if (gp.isPlaying()) {
-                            iterator.remove();
-                        }
-                    }
-                }
-
-                return;
-            }
-
-            String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore())).setVariable("player", player.getDisplayName()).setVariable("message", Messaging.stripColor(event.getMessage())).setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player)).format("chat.local");
+            String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore()))
+                    .setVariable("player", player.getDisplayName())
+                    .setVariable("message", Messaging.stripColor(event.getMessage()))
+                    .setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
+                    .format("&e{score} {prefix}&b{player} &e&l> &r&7{message}");
 
             event.setCancelled(true);
             Bukkit.broadcastMessage(message);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
