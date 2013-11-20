@@ -1,0 +1,13 @@
+name: SkyWars
+version: 1.0
+description: Skywars Plugin For Bukkit
+authors: [Wietje, Harry5573]
+main: vc.pvp.skywars.SkyWars
+depend: [WorldEdit, Essentials, Vault, WhatIsIt]
+commands:
+  skywars:
+    aliases: [sw]
+    description: Main command of the SkyWars plugin
+  global:
+    aliases: [g]
+    description: Allows you to send a message to all players
