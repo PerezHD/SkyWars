@@ -29,7 +29,7 @@ public class ItemUtils {
 
             if (args.length > 2) {
                 MetaItemStack metaItemStack = new MetaItemStack(itemStack);
-                metaItemStack.parseStringMeta(null, true, args, 2, essentials);
+                metaItemStack.parseStringMeta(null, true, args, 2, (net.ess3.api.IEssentials) essentials);
                 itemStack = metaItemStack.getItemStack();
             }
 

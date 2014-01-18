@@ -10,8 +10,8 @@
 <project name="SkyWars" default="default" basedir=".">
     <description>Builds, tests, and runs the project SkyWars.</description>
     <import file="nbproject/build-impl.xml"/>
-                            <target name="-post-jar">
-<copy file="${dist.jar}" flatten="true" todir="C:\Users\Harry5573\Documents\Minecraft\CODING\Test Server\plugins"/> 
+                                    <target name="-post-jar">
+<copy file="${dist.jar}" flatten="true" todir="C:\Users\devan_000\Documents\Minecraft\CODING\Test Server\plugins"/> 
 </target>
     <!--
 

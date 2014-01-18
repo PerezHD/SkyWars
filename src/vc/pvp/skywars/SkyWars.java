@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import org.bukkit.plugin.PluginManager;
 
 public class SkyWars extends JavaPlugin {
 
@@ -81,12 +82,13 @@ public class SkyWars extends JavaPlugin {
         } catch (IOException e) {
         }
 
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-        Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
-        Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
-        Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new PlayerListener(), this);
+        pm.registerEvents(new EntityListener(), this);
+        pm.registerEvents(new BlockListener(), this);
+        pm.registerEvents(new InventoryListener(), this);
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new SyncTask(), 20L, 20L);
+        getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SyncTask(), 20L, 20L);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

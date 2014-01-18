@@ -1,0 +1,10 @@
+name: SkyWars
+version: 2.0
+description: Skywars Plugin For Bukkit edited for ArkhamNetwork
+authors: [Wietje, Harry5573]
+main: vc.pvp.skywars.SkyWars
+depend: [WorldEdit, Essentials, Vault, WhatIsIt]
+commands:
+  skywars:
+    aliases: [sw]
+    description: Main command of the SkyWars plugin
