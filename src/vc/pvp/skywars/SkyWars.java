@@ -76,12 +76,6 @@ public class SkyWars extends JavaPlugin {
         KitController.get();
         IconMenuController.get();
 
-        try {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (IOException e) {
-        }
-
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new EntityListener(), this);

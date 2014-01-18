@@ -18,17 +18,17 @@ import vc.pvp.skywars.player.GamePlayer;
 import vc.pvp.skywars.utilities.Messaging;
 import vc.pvp.skywars.utilities.StringUtils;
 
-import java.util.Iterator;
 import org.bukkit.event.EventPriority;
 
 public class PlayerListener implements Listener {
 
-    @EventHandler(priority= EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         PlayerController.get().register(event.getPlayer());
+        event.getPlayer().teleport(PluginConfig.getLobbySpawn());
     }
 
-    @EventHandler(priority= EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
@@ -41,7 +41,7 @@ public class PlayerListener implements Listener {
         PlayerController.get().unregister(player);
     }
 
-    @EventHandler(priority= EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         final GamePlayer gamePlayer = PlayerController.get().get(player);
@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority= EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
@@ -83,7 +83,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (!event.isCancelled()) {
@@ -94,19 +94,20 @@ public class PlayerListener implements Listener {
                     .setVariable("message", Messaging.stripColor(event.getMessage()))
                     .setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
                     .format("&e{score} {prefix}&b{player} &e&l> &r&7{message}");
-            
-            event.setMessage(message);
+
+            event.setCancelled(true);
+            Bukkit.broadcastMessage(message);
         }
     }
-    
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
-        
+
         if (gamePlayer.isPlaying()) {
             String command = event.getMessage().split(" ")[0].toLowerCase();
-            
+
             if (!command.equals("/sw") && !PluginConfig.isCommandWhitelisted(command)) {
                 event.setCancelled(true);
                 player.sendMessage(new Messaging.MessageFormatter().withPrefix().format("error.cmd-disabled"));
