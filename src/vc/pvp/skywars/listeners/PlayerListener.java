@@ -90,11 +90,8 @@ public class PlayerListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
-        String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore()))
-                .setVariable("player", player.getDisplayName())
-                .setVariable("message", Messaging.stripColor(event.getMessage()))
-                .setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
-                .format("&8[&cscore&8] {prefix}&b{player} &d&l>> &r&f{message}");
+        String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore())).setVariable("player", player.getDisplayName()).setVariable("message", Messaging.stripColor(event.getMessage())).setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
+                .format("&8[&c{score}&8] {prefix}&b{player} &d&l>> &r&f{message}");
 
         event.setCancelled(true);
         Bukkit.broadcastMessage(message);

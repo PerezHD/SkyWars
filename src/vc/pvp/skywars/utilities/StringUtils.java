@@ -37,11 +37,11 @@ public class StringUtils {
         char color = '7';
 
         if (score > 0) {
-            color = 'a';
+            color = '6';
         } else if (score < 0) {
             color = 'c';
         }
 
-        return "\247" + color + "(" + (score > 0 ? "+" : "") + score + note + ")";
+        return "\247" + color + (score > 0 ? "+" : "") + score + note;
     }
 }
