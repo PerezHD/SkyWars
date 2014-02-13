@@ -31,20 +31,20 @@ import java.util.Map;
 public class Game {
 
     private GameState gameState;
-    private Map<Integer, GamePlayer> idPlayerMap = Maps.newLinkedHashMap();
-    private Map<GamePlayer, Integer> playerIdMap = Maps.newHashMap();
+    private final Map<Integer, GamePlayer> idPlayerMap = Maps.newLinkedHashMap();
+    private final Map<GamePlayer, Integer> playerIdMap = Maps.newHashMap();
     private int playerCount = 0;
-    private int slots;
-    private Map<Integer, Location> spawnPlaces = Maps.newHashMap();
+    private final int slots;
+    private final Map<Integer, Location> spawnPlaces = Maps.newHashMap();
     private int timer;
     private Scoreboard scoreboard;
     private Objective objective;
     private boolean built;
 
-    private CuboidClipboard schematic;
-    private World world;
+    private final CuboidClipboard schematic;
+    private final World world;
     private int[] islandCoordinates;
-    private List<Location> chestList = Lists.newArrayList();
+    private final List<Location> chestList = Lists.newArrayList();
 
     public Game(CuboidClipboard schematic) {
         this.schematic = schematic;
@@ -257,13 +257,13 @@ public class Game {
 
         if (event != null) {
             Location location = player.getLocation().clone();
-            World world = location.getWorld();
+            World worldName = location.getWorld();
 
             for (ItemStack itemStack : event.getDrops()) {
-                world.dropItemNaturally(location, itemStack);
+                worldName.dropItemNaturally(location, itemStack);
             }
 
-            world.spawn(location, ExperienceOrb.class).setExperience(event.getDroppedExp());
+            worldName.spawn(location, ExperienceOrb.class).setExperience(event.getDroppedExp());
 
             event.setDeathMessage(null);
             event.getDrops().clear();

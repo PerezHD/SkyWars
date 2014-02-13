@@ -9,14 +9,13 @@ import java.util.List;
 
 public class BlockBuilder extends BukkitRunnable {
 
-    private EditSession editSession;
-    private List<BlockBuilderEntry> vectorList;
-    private List<BlockBuilderEntry> delayedList;
-    private int blocksPerTick;
-    private BuildFinishedHandler buildFinishedHandler;
+    private final EditSession editSession;
+    private final List<BlockBuilderEntry> vectorList;
+    private final List<BlockBuilderEntry> delayedList;
+    private final int blocksPerTick;
+    private final BuildFinishedHandler buildFinishedHandler;
 
-    public BlockBuilder(EditSession editSession, List<BlockBuilderEntry> vectorList, List<BlockBuilderEntry> delayedList,
-                        int blocksPerTick, BuildFinishedHandler buildFinishedHandler) {
+    public BlockBuilder(EditSession editSession, List<BlockBuilderEntry> vectorList, List<BlockBuilderEntry> delayedList, int blocksPerTick, BuildFinishedHandler buildFinishedHandler) {
         this.editSession = editSession;
         this.vectorList = vectorList;
         this.delayedList = delayedList;
@@ -56,7 +55,6 @@ public class BlockBuilder extends BukkitRunnable {
     }
 
     public interface BuildFinishedHandler {
-
         void onBuildFinish();
     }
 }

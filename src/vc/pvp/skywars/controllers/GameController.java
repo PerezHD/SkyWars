@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public class GameController {
 
     private static GameController instance;
-    private List<Game> gameList = Lists.newArrayList();
+    private final List<Game> gameList = Lists.newArrayList();
 
     public Game findEmpty() {
         for (Game game : gameList) {
@@ -49,7 +49,7 @@ public class GameController {
     }
 
     public void shutdown() {
-        for (Game game : new ArrayList<Game>(gameList)) {
+        for (Game game : new ArrayList<>(gameList)) {
             game.onGameEnd();
         }
     }

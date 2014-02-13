@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class MainCommand implements CommandExecutor {
 
-    private Map<String, CommandExecutor> subCommandMap = Maps.newHashMap();
+    private final Map<String, CommandExecutor> subCommandMap = Maps.newHashMap();
 
     public MainCommand() {
         subCommandMap.put("reload", new ReloadCommand());

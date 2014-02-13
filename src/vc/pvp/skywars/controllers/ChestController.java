@@ -14,8 +14,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
+import vc.pvp.skywars.struct.ChestItem;
 
-public class ChestController {
+public final class ChestController {
 
     private static ChestController chestController;
     private final List<ChestItem> chestItemList = Lists.newArrayList();
@@ -61,29 +62,10 @@ public class ChestController {
             if (random.nextInt(100) + 1 <= chestItem.getChance()) {
                 inventory.addItem(chestItem.getItem());
 
-                if (added++ > inventory.getSize()) {
+                if (added++ >= inventory.getSize()) {
                     break;
                 }
             }
-        }
-    }
-
-    public class ChestItem {
-
-        private ItemStack item;
-        private int chance;
-
-        public ChestItem(ItemStack item, int chance) {
-            this.item = item;
-            this.chance = chance;
-        }
-
-        public ItemStack getItem() {
-            return item;
-        }
-
-        public int getChance() {
-            return chance;
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class PluginConfig {
 
-    private static FileConfiguration storage;
+    private static final FileConfiguration storage;
     private static Location lobbySpawn;
     private static List<String> whitelistedCommands = Lists.newArrayList();
 

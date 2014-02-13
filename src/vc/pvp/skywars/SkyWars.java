@@ -14,7 +14,6 @@ import vc.pvp.skywars.listeners.BlockListener;
 import vc.pvp.skywars.listeners.EntityListener;
 import vc.pvp.skywars.listeners.InventoryListener;
 import vc.pvp.skywars.listeners.PlayerListener;
-import vc.pvp.skywars.metrics.MetricsLite;
 import vc.pvp.skywars.storage.DataStorage;
 import vc.pvp.skywars.storage.SQLStorage;
 import vc.pvp.skywars.tasks.SyncTask;
@@ -82,10 +81,13 @@ public class SkyWars extends JavaPlugin {
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new InventoryListener(), this);
 
-        getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SyncTask(), 20L, 20L);
-    }
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new SyncTask(), 20L, 20L);
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    }
+    
+    
+    
+    @SuppressWarnings({"StatementWithEmptyBody", "empty-statement"})
     @Override
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(this);
@@ -150,7 +152,7 @@ public class SkyWars extends JavaPlugin {
 
         try {
             database.createTables();
-        } catch (Exception exception) {
+        } catch (IOException | SQLException exception) {
             getLogger().log(Level.SEVERE, String.format("An exception was thrown while attempting to create tables: %s", exception.getMessage()));
             return false;
         }

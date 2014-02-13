@@ -24,8 +24,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        PlayerController.get().register(event.getPlayer());
-        event.getPlayer().teleport(PluginConfig.getLobbySpawn());
+        Player player = event.getPlayer();
+        
+        PlayerController.get().register(player);
+        player.teleport(PluginConfig.getLobbySpawn());
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -55,17 +57,17 @@ public class PlayerListener implements Listener {
                     public void run() {
                         gamePlayer.restoreState();
                     }
-                }, 1L);
+                }, 2L);
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
 
-        if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getTypeId() == Material.STONE_PLATE.getId()) {
+        if (event.getAction() == Action.PHYSICAL && event.getClickedBlock() != null && event.getClickedBlock().getTypeId() == Material.STONE_PLATE.getId()) {
             if (!gamePlayer.isPlaying() && player.getLocation().getWorld().equals(PluginConfig.getLobbySpawn().getWorld())) {
                 if (SchematicController.get().size() == 0) {
                     player.sendMessage(new Messaging.MessageFormatter().format("error.no-schematics"));
@@ -84,23 +86,21 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (!event.isCancelled()) {
-            Player player = event.getPlayer();
-            GamePlayer gamePlayer = PlayerController.get().get(player);
-            String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore()))
-                    .setVariable("player", player.getDisplayName())
-                    .setVariable("message", Messaging.stripColor(event.getMessage()))
-                    .setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
-                    .format("&e{score} {prefix}&b{player} &e&l> &r&7{message}");
+        Player player = event.getPlayer();
+        GamePlayer gamePlayer = PlayerController.get().get(player);
+        String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore()))
+                .setVariable("player", player.getDisplayName())
+                .setVariable("message", Messaging.stripColor(event.getMessage()))
+                .setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
+                .format("&8[&cscore&8] {prefix}&b{player} &d&l>> &r&f{message}");
 
-            event.setCancelled(true);
-            Bukkit.broadcastMessage(message);
-        }
+        event.setCancelled(true);
+        Bukkit.broadcastMessage(message);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);

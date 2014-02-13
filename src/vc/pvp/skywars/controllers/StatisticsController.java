@@ -21,7 +21,6 @@ public class StatisticsController {
     }
 
     public void update() {
-
     }
 
     public class StatisticsWall {

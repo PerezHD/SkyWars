@@ -55,8 +55,6 @@ public class SQLStorage extends DataStorage {
                         }
 
                     } catch (final SQLException sqlException) {
-                        sqlException.printStackTrace();
-
                     } finally {
                         if (resultSet != null) {
                             try {
@@ -148,8 +146,6 @@ public class SQLStorage extends DataStorage {
                     preparedStatement.executeUpdate();
 
                 } catch (final SQLException sqlException) {
-                    sqlException.printStackTrace();
-
                 } finally {
                     if (preparedStatement != null) {
                         try {

@@ -11,7 +11,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Map;
 
-public class Database {
+public final class Database {
 
     private final String connectionUri;
     private final String username;

@@ -23,7 +23,7 @@ public class WorldController {
     private static final int PASTE_HEIGHT = 75;
     private static WorldController worldController;
     private World islandWorld;
-    private Queue<int[]> freeIslands = Lists.newLinkedList();
+    private final Queue<int[]> freeIslands = Lists.newLinkedList();
     private int nextId;
 
     public WorldController() {
