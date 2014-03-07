@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import vc.pvp.skywars.SkyWars;
 import vc.pvp.skywars.controllers.PlayerController;
@@ -25,6 +26,12 @@ public class EntityListener implements Listener {
         Player player = (Player) event.getEntity();
         GamePlayer gamePlayer = PlayerController.get().get(player);
 
+         if (event.getCause() == DamageCause.FIRE_TICK && gamePlayer.shouldSkipFireTicks()) {
+             player.setFireTicks(0);
+             event.setCancelled(true);
+             gamePlayer.setSkipFireTicks(false);
+         }
+        
         if (!gamePlayer.isPlaying()) {
             return;
         }
@@ -51,6 +58,7 @@ public class EntityListener implements Listener {
             return;
         }
 
+        DamageCause damageCause = player.getLastDamageCause().getCause();
         if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
             Bukkit.getScheduler().runTaskLater(SkyWars.get(), new Runnable() {
                 @Override
@@ -58,6 +66,9 @@ public class EntityListener implements Listener {
                     gamePlayer.getGame().onPlayerDeath(gamePlayer, event);
                 }
             }, 1L);
+             } else if (damageCause == DamageCause.LAVA || damageCause == DamageCause.FIRE || damageCause == DamageCause.FIRE_TICK) {
+             gamePlayer.setSkipFireTicks(true);
+             gamePlayer.getGame().onPlayerDeath(gamePlayer, event);
         } else {
             gamePlayer.getGame().onPlayerDeath(gamePlayer, event);
         }

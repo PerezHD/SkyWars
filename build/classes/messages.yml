@@ -14,6 +14,9 @@ game:
   eliminated:
     self: '&5You have been eliminated. Better &cluck&5 next time!'
     others: '&6Player &9{player}&6 has been eliminated!'
+chat:
+  local: '&e[L] {score} {prefix}&8{player} &e&l> &r&7{message}'
+  global: '&c[G] {score} {prefix}&8{player} &c&l> &r&7{message}'
 error:
   cmd-disabled: 'This command is disabled during the game!'
   no-schematics: '&cThere are no schematics available.'
@@ -28,12 +31,20 @@ error:
   no-such-kit: '&cNo such kit!'
   not-enough-score: '&cNot enough score to purchase this kit!'
   no-permission-kit: '&cNo permission to use this kit!'
+  no-valid-score: '&cNot a valid score!'
+  no-valid-player: '&cNot a valid player!'
+  not-enough-arguments: '&cNot enough arguments. &f{example}'
+  invalid-cmd: '&eInvalid command'
 success:
   lobby-set: '&aLobby spawn has been set.'
   reload: '&aChests, kits and plugin.yml has been reloaded'
   enjoy-kit: '&aEnjoy your kit!'
+  score-set: '&6{player}&a''s score has been set to &6{value}'
+  score-give: '&6{value} &ahas been added to &6{player}&a''s score'
+  score-take: '&6{value} &ahas been removed from &6{player}&a''s score'
 cmd:
   available-commands: '&eAvailable commands:'
+  score: '&a{player}''s score is: &6{value}'
 kit:
   window-title: '&dKit Menu'
   lores:

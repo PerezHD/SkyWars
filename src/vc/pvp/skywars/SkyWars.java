@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
 public class SkyWars extends JavaPlugin {
@@ -111,6 +112,7 @@ public class SkyWars extends JavaPlugin {
     }
 
     private void deleteIslandWorlds() {
+
         File workingDirectory = new File(".");
         File[] contents = workingDirectory.listFiles();
 
@@ -119,20 +121,26 @@ public class SkyWars extends JavaPlugin {
                 if (!file.isDirectory() || !file.getName().matches("island-\\d+")) {
                     continue;
                 }
-
-                FileUtils.deleteFolder(file);
-            }
-        }
-
-        workingDirectory = new File("./plugins/WorldGuard/worlds/");
-        contents = workingDirectory.listFiles();
-
-        if (contents != null) {
-            for (File file : contents) {
-                if (!file.isDirectory() || !file.getName().matches("island-\\d+")) {
-                    continue;
+                World world = this.getServer().getWorld(file.getName());
+                Boolean result = false;
+                if (!result) {
+                    if (world != null) {
+                        result = this.getServer().unloadWorld(world, true);
+                        if (result == true) {
+                            this.getLogger().log(Level.INFO, "World ''{0}'' was unloaded from memory.", file.getName());
+                        } else {
+                            this.getLogger().log(Level.SEVERE, "World ''{0}'' could not be unloaded.", file.getName());
+                        }
+                    }
+                    result = FileUtils.deleteFolder(file);
+                    if (result == true) {
+                        this.getLogger().log(Level.INFO, "World ''{0}'' was deleted.", file.getName());
+                    } else {
+                        this.getLogger().log(Level.SEVERE, "World ''{0}'' was NOT deleted.", file.getName());
+                        this.getLogger().log(Level.SEVERE, "Are you sure the folder {0} exists?", file.getName());
+                        this.getLogger().log(Level.SEVERE, "Please check your file permissions on ''{0}''", file.getName());
+                    }
                 }
-                FileUtils.deleteFolder(file);
             }
         }
     }
