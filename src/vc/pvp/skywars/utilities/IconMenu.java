@@ -49,6 +49,7 @@ public class IconMenu {
         this.optionIcons = null;
     }
 
+    //Not event handler.
     public void onInventoryClick(InventoryClickEvent event) {
         if (!event.getInventory().getTitle().equals(name)) {
             return;
@@ -86,9 +87,9 @@ public class IconMenu {
 
     public class OptionClickEvent {
 
-        private Player player;
-        private int position;
-        private String name;
+        private final Player player;
+        private final int position;
+        private final String name;
         private boolean close;
         private boolean destroy;
 

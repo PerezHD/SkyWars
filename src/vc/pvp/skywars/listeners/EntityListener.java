@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -17,7 +18,7 @@ import vc.pvp.skywars.player.GamePlayer;
 
 public class EntityListener implements Listener {
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) {
             return;
@@ -49,7 +50,7 @@ public class EntityListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         Player player = event.getEntity();
         final GamePlayer gamePlayer = PlayerController.get().get(player);

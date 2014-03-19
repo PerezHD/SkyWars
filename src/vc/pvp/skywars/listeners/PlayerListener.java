@@ -13,7 +13,6 @@ import vc.pvp.skywars.controllers.GameController;
 import vc.pvp.skywars.controllers.PlayerController;
 import vc.pvp.skywars.controllers.SchematicController;
 import vc.pvp.skywars.game.Game;
-import vc.pvp.skywars.game.GameState;
 import vc.pvp.skywars.player.GamePlayer;
 import vc.pvp.skywars.utilities.Messaging;
 import vc.pvp.skywars.utilities.StringUtils;
@@ -62,27 +61,25 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    SchematicController controller = SchematicController.get();
+    PlayerController pController = PlayerController.get();
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        GamePlayer gamePlayer = PlayerController.get().get(player);
-
-        if (event.getAction() == Action.PHYSICAL && event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.STONE_PLATE) {
-            if (!gamePlayer.isPlaying() && player.getLocation().getWorld().equals(PluginConfig.getLobbySpawn().getWorld())) {
-                if (SchematicController.get().size() == 0) {
-                    player.sendMessage(new Messaging.MessageFormatter().format("error.no-schematics"));
-                    return;
-                }
-
-                Game game = GameController.get().findEmpty();
-                game.onPlayerJoin(gamePlayer);
-            }
-
+        if (event.getAction() == null || event.getAction() != Action.PHYSICAL || event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.STONE_PLATE) {
             return;
         }
+        Player player = event.getPlayer();
+        GamePlayer gamePlayer = pController.get(player);
 
-        if (gamePlayer.isPlaying() && gamePlayer.getGame().getState() != GameState.PLAYING) {
-            event.setCancelled(true);
+        if (!gamePlayer.isPlaying() && player.getWorld().getName().equals(PluginConfig.getLobbySpawnWorldName())) {
+            if (controller.size() == 0) {
+                player.sendMessage(new Messaging.MessageFormatter().format("error.no-schematics"));
+                return;
+            }
+
+            Game game = GameController.get().findEmpty();
+            game.onPlayerJoin(gamePlayer);
         }
     }
 
@@ -90,8 +87,7 @@ public class PlayerListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = PlayerController.get().get(player);
-        String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore())).setVariable("player", player.getDisplayName()).setVariable("message", Messaging.stripColor(event.getMessage())).setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player))
-                .format("&8[&c{score}&8] {prefix}&b{player} &d&l>> &r&f{message}");
+        String message = new Messaging.MessageFormatter().setVariable("score", StringUtils.formatScore(gamePlayer.getScore())).setVariable("player", player.getDisplayName()).setVariable("message", Messaging.stripColor(event.getMessage())).setVariable("prefix", SkyWars.getChat().getPlayerPrefix(player)).format("&8[&c{score}&8] {prefix}&b{player} &d&l>> &r&f{message}");
 
         event.setCancelled(true);
         Bukkit.broadcastMessage(message);

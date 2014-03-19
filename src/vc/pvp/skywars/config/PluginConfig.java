@@ -15,12 +15,14 @@ public class PluginConfig {
 
     private static final FileConfiguration storage;
     private static Location lobbySpawn;
+    private static final String lobbySpawnWorldName;
     private static List<String> whitelistedCommands = Lists.newArrayList();
 
     static {
         storage = SkyWars.get().getConfig();
 
         lobbySpawn = LocationUtil.getLocation(Bukkit.getWorld(storage.getString("lobby.world")), storage.getString("lobby.spawn"));
+        lobbySpawnWorldName = storage.getString("lobby.world");
         if (storage.contains("whitelisted-commands")) {
             whitelistedCommands = storage.getStringList("whitelisted-commands");
         }
@@ -28,6 +30,10 @@ public class PluginConfig {
 
     public static Location getLobbySpawn() {
         return lobbySpawn;
+    }
+    
+    public static String getLobbySpawnWorldName() {
+        return lobbySpawnWorldName;
     }
 
     public static void setLobbySpawn(Location location) {

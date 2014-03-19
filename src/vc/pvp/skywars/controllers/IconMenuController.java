@@ -61,14 +61,14 @@ public class IconMenuController implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player && menuMap.containsKey(event.getWhoClicked())) {
-            menuMap.get(event.getWhoClicked()).onInventoryClick(event);
+        if (event.getWhoClicked() instanceof Player && menuMap.containsKey((Player)event.getWhoClicked())) {
+            menuMap.get((Player)event.getWhoClicked()).onInventoryClick(event);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getPlayer() instanceof Player && menuMap.containsKey(event.getPlayer())) {
+        if (event.getPlayer() instanceof Player && menuMap.containsKey((Player)event.getPlayer())) {
             destroy((Player) event.getPlayer());
         }
     }
