@@ -1,7 +1,6 @@
 package vc.pvp.skywars.controllers;
 
 import com.google.common.collect.Lists;
-import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -17,6 +16,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.logging.Level;
+import org.primesoft.asyncworldedit.worldedit.AsyncCuboidClipboard;
 
 public class WorldController {
 
@@ -70,7 +70,7 @@ public class WorldController {
         }
     }
 
-    public World create(Game game, CuboidClipboard schematic) {
+    public World create(Game game, AsyncCuboidClipboard schematic) {
         if (freeIslands.size() == 0) {
             LogUtils.log(Level.INFO, getClass(), "No more free islands left. Generating new world.");
 

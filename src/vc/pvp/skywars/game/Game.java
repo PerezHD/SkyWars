@@ -2,7 +2,6 @@ package vc.pvp.skywars.game;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sk89q.worldedit.CuboidClipboard;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,6 +26,7 @@ import vc.pvp.skywars.utilities.StringUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.primesoft.asyncworldedit.worldedit.AsyncCuboidClipboard;
 
 public class Game {
 
@@ -41,12 +41,12 @@ public class Game {
     private Objective objective;
     private boolean built;
 
-    private CuboidClipboard schematic;
+    private AsyncCuboidClipboard schematic;
     private World world;
     private int[] islandCoordinates;
     private List<Location> chestList = Lists.newArrayList();
 
-    public Game(CuboidClipboard schematic) {
+    public Game(AsyncCuboidClipboard schematic) {
         this.schematic = schematic;
         world = WorldController.get().create(this, schematic);
         slots = spawnPlaces.size();

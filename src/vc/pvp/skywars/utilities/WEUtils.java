@@ -1,7 +1,6 @@
 package vc.pvp.skywars.utilities;
 
 import com.google.common.collect.Lists;
-import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.Vector;
@@ -18,11 +17,21 @@ import vc.pvp.skywars.game.Game;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.primesoft.asyncworldedit.PluginMain;
+import org.primesoft.asyncworldedit.worldedit.AsyncCuboidClipboard;
+import org.primesoft.asyncworldedit.worldedit.AsyncEditSession;
+import org.primesoft.asyncworldedit.worldedit.AsyncEditSessionFactory;
 
 public class WEUtils {
 
-    public static boolean pasteSchematic(Location origin, CuboidClipboard schematic) {
-        EditSession editSession = new EditSession(new BukkitWorld(origin.getWorld()), Integer.MAX_VALUE);
+    static SkyWars plugin = SkyWars.getInstance();
+
+    public static boolean pasteSchematic(final Location origin, final AsyncCuboidClipboard schematic) {
+        //AsyncEditSession editSession = new AsyncEditSession(new BukkitWorld(origin.getWorld()), Integer.MAX_VALUE);
+        PluginMain we = (PluginMain) Bukkit.getPluginManager().getPlugin("AsyncWorldEdit");
+
+        AsyncEditSessionFactory aesf = new AsyncEditSessionFactory(we);
+        AsyncEditSession editSession = new AsyncEditSession(aesf, we, "internalUsers", new BukkitWorld(origin.getWorld()), Integer.MAX_VALUE);
         editSession.setFastMode(true);
 
         try {
@@ -30,11 +39,11 @@ public class WEUtils {
         } catch (MaxChangedBlocksException ignored) {
             return false;
         }
-
         return true;
+
     }
 
-    public static void buildSchematic(final Game game, final Location origin, final CuboidClipboard schematic) {
+    public static void buildSchematic(final Game game, final Location origin, final AsyncCuboidClipboard schematic) {
         Bukkit.getScheduler().runTaskAsynchronously(SkyWars.get(), new Runnable() {
             @Override
             public void run() {

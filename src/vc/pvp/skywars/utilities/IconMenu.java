@@ -58,6 +58,7 @@ public class IconMenu {
         event.setCancelled(true);
 
         int slot = event.getRawSlot();
+        
         if (!(slot >= 0 && slot < size && optionNames[slot] != null)) {
             return;
         }

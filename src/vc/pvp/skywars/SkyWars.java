@@ -36,6 +36,10 @@ public class SkyWars extends JavaPlugin {
     private static Chat chat;
     private Database database;
 
+    public static SkyWars getInstance() {
+        return instance;
+    }
+    
     @Override
     public void onEnable() {
         instance = this;

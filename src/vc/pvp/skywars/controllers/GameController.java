@@ -1,7 +1,6 @@
 package vc.pvp.skywars.controllers;
 
 import com.google.common.collect.Lists;
-import com.sk89q.worldedit.CuboidClipboard;
 import vc.pvp.skywars.SkyWars;
 import vc.pvp.skywars.game.Game;
 import vc.pvp.skywars.game.GameState;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
+import org.primesoft.asyncworldedit.worldedit.AsyncCuboidClipboard;
 
 public class GameController {
 
@@ -28,7 +28,7 @@ public class GameController {
     }
 
     public Game create() {
-        CuboidClipboard schematic = SchematicController.get().getRandom();
+        AsyncCuboidClipboard schematic = SchematicController.get().getRandom();
         Game game = new Game(schematic);
 
         while (!game.isReady()) {

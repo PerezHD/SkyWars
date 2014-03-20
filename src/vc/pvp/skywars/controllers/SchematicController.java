@@ -2,7 +2,6 @@ package vc.pvp.skywars.controllers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.schematic.SchematicFormat;
@@ -17,14 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
+import org.primesoft.asyncworldedit.worldedit.AsyncCuboidClipboard;
 
 public class SchematicController {
 
     private static SchematicController instance;
     private final Random random = new Random();
-    private final Map<String, CuboidClipboard> schematicMap = Maps.newHashMap();
-    private final Map<CuboidClipboard, Map<Integer, Vector>> spawnCache = Maps.newHashMap();
-    private final Map<CuboidClipboard, List<Vector>> chestCache = Maps.newHashMap();
+    private final Map<String, AsyncCuboidClipboard> schematicMap = Maps.newHashMap();
+    private final Map<AsyncCuboidClipboard, Map<Integer, Vector>> spawnCache = Maps.newHashMap();
+    private final Map<AsyncCuboidClipboard, List<Vector>> chestCache = Maps.newHashMap();
 
     public SchematicController() {
         File dataDirectory = SkyWars.get().getDataFolder();
@@ -56,7 +56,7 @@ public class SchematicController {
             }
 
             try {
-                registerSchematic(schematic.getName().replace(".schematic", ""), schematicFormat.load(schematic));
+                registerSchematic(schematic.getName().replace(".schematic", ""), new AsyncCuboidClipboard("internal", schematicFormat.load(schematic)));
             } catch (Exception e) {
                 LogUtils.log(Level.INFO, getClass(), "Could not load schematic %s: %s", schematic.getName(), e.getMessage());
             }
@@ -65,7 +65,7 @@ public class SchematicController {
         LogUtils.log(Level.INFO, getClass(), "Registered %d schematics ...", schematicMap.size());
     }
 
-    public void registerSchematic(final String name, final CuboidClipboard schematic) {
+    public void registerSchematic(final String name, final AsyncCuboidClipboard schematic) {
         Bukkit.getScheduler().runTaskAsynchronously(SkyWars.get(), new Runnable() {
             @Override
             public void run() {
@@ -100,13 +100,13 @@ public class SchematicController {
         });
     }
 
-    public CuboidClipboard getRandom() {
-        List<CuboidClipboard> schematics = Lists.newArrayList(schematicMap.values());
+    public AsyncCuboidClipboard getRandom() {
+        List<AsyncCuboidClipboard> schematics = Lists.newArrayList(schematicMap.values());
         return schematics.get(random.nextInt(schematics.size()));
     }
 
-    public String getName(CuboidClipboard cuboidClipboard) {
-        for (Map.Entry<String, CuboidClipboard> entry : schematicMap.entrySet()) {
+    public String getName(AsyncCuboidClipboard cuboidClipboard) {
+        for (Map.Entry<String, AsyncCuboidClipboard> entry : schematicMap.entrySet()) {
             if (entry.getValue().equals(cuboidClipboard)) {
                 return entry.getKey();
             }
@@ -115,7 +115,7 @@ public class SchematicController {
         return null;
     }
 
-    public void cacheSpawn(CuboidClipboard schematic, int position, Vector location) {
+    public void cacheSpawn(AsyncCuboidClipboard schematic, int position, Vector location) {
         Map<Integer, Vector> spawnPlaces;
 
         if (spawnCache.containsKey(schematic)) {
@@ -129,11 +129,11 @@ public class SchematicController {
         spawnCache.put(schematic, spawnPlaces);
     }
 
-    public Map<Integer, Vector> getCachedSpawns(CuboidClipboard schematic) {
+    public Map<Integer, Vector> getCachedSpawns(AsyncCuboidClipboard schematic) {
         return spawnCache.get(schematic);
     }
 
-    private void cacheChest(CuboidClipboard schematic, Vector location) {
+    private void cacheChest(AsyncCuboidClipboard schematic, Vector location) {
         List<Vector> chestList;
 
         if (chestCache.containsKey(schematic)) {
@@ -146,7 +146,7 @@ public class SchematicController {
         chestCache.put(schematic, chestList);
     }
 
-    public Collection<Vector> getCachedChests(CuboidClipboard schematic) {
+    public Collection<Vector> getCachedChests(AsyncCuboidClipboard schematic) {
         return chestCache.get(schematic);
     }
 
